@@ -1,0 +1,9 @@
+number = 0
+
+[experiment_1]
+path = "./path_1"
+number = 20
+
+[experiment_2]
+path = "./path_2"
+number = 100
