@@ -1,10 +1,10 @@
 import unittest
 import sys
-from toml_argparse import ExperimentParser
+from toml_argparse import ArgumentParser
 
 class ParserTest(unittest.TestCase):
     def _create_parser(self):
-        parser = ExperimentParser()
+        parser = ArgumentParser()
         parser.add_argument("--path", type=str, default="./test")
         parser.add_argument("--number", type=int, default=10)
         return parser
