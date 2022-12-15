@@ -2,38 +2,36 @@ import argparse
 import toml
 import sys
 
-class ExperimentParser:
+class ExperimentParser(argparse.ArgumentParser):
     r"""Convenience argument parser for all experiments also accepts a .toml file as input
     This class is a wrapper around the argparse.ArgumentParser class. It allows to parse arguments
     from the command line and from a .toml file. 
     """
-
     def __init__(self, *args, **kwargs):
-        self.parser = argparse.ArgumentParser(*args, **kwargs)
-        self.parser.add_argument(
+        super().__init__(*args, **kwargs)
+        self.add_argument(
             "--config",
             type=str,
             default="",
             help="Path to the configuration file.",
         )
-        self.parser.add_argument(
+        self.add_argument(
             "--section", 
             type=str, 
             default="",
             help="Section name in the config file to parse arguments from")
 
-    def add_argument(self, *args, **kwargs):
-        return self.parser.add_argument(*args, **kwargs)
 
     def _extract_args(self):
         """ Find the default arguments of the argument parser if any and the ones that are passed
         through the command line"""
         sys_defaults = sys.argv.copy()
         sys.argv = []
-        default_args = self.parser.parse_args()
+        default_args = super().parse_args()
         sys.argv = sys_defaults
-        cmdl_args = self.parser.parse_args()
-        
+        cmdl_args = super().parse_args()
+
+    
         return default_args, cmdl_args
 
     def _find_changed_args(self, default_args, sys_args):
@@ -105,14 +103,12 @@ class ExperimentParser:
             section_config = config
             section_config = self._remove_nested_keys(section_config)
 
-
         # This safely also ignores the section name in the nested dict
         for key, value in section_config.items():
             if key not in default_args:
                 # Raise the default argparse error alongside the usage
                 self.parser.error("unrecognized arguments: '{}''".format(key))
-
-        
+    
             # If the key has been passed in the command line, do not overwrite the 
             # command line argument with the toml argument, but vice versa.
             if key in changed_args:
