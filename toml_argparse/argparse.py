@@ -2,11 +2,13 @@ import argparse
 import toml
 import sys
 
-class ExperimentParser(argparse.ArgumentParser):
+
+class ArgumentParser(argparse.ArgumentParser):
     r"""Convenience argument parser for all experiments also accepts a .toml file as input
     This class is a wrapper around the argparse.ArgumentParser class. It allows to parse arguments
-    from the command line and from a .toml file. 
+    from the command line and from a .toml file.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_argument(
@@ -16,14 +18,14 @@ class ExperimentParser(argparse.ArgumentParser):
             help="Path to the configuration file.",
         )
         self.add_argument(
-            "--section", 
-            type=str, 
+            "--section",
+            type=str,
             default="",
-            help="Section name in the config file to parse arguments from")
-
+            help="Section name in the config file to parse arguments from",
+        )
 
     def _extract_args(self):
-        """ Find the default arguments of the argument parser if any and the ones that are passed
+        """Find the default arguments of the argument parser if any and the ones that are passed
         through the command line"""
         sys_defaults = sys.argv.copy()
         sys.argv = []
@@ -31,7 +33,6 @@ class ExperimentParser(argparse.ArgumentParser):
         sys.argv = sys_defaults
         cmdl_args = super().parse_args()
 
-    
         return default_args, cmdl_args
 
     def _find_changed_args(self, default_args, sys_args):
@@ -57,9 +58,7 @@ class ExperimentParser(argparse.ArgumentParser):
         try:
             config = toml.load(path)
         except FileNotFoundError:
-            raise FileNotFoundError(
-                "Config file {} not found".format(path)
-            )
+            raise FileNotFoundError("Config file {} not found".format(path))
         return config
 
     def _remove_nested_keys(self, dictionary):
@@ -71,13 +70,12 @@ class ExperimentParser(argparse.ArgumentParser):
                 new_dict[key] = value
         return new_dict
 
-
     def parse_args(self):
         """Parse the arguments from the command line and the configuration file.
         If a section name is provided, only the arguments in that section will be parsed from the .toml file"""
-        
+
         default_args, sys_args = self._extract_args()
-    
+
         # These are the default arguments options updated by the command line
         if not sys_args.config:
             self._pop_keys(sys_args, ("section", "config"))
@@ -87,12 +85,11 @@ class ExperimentParser(argparse.ArgumentParser):
         # the argument is already specified in the command line
         config = self._load_toml(sys_args.config)
 
-        
         changed_args = self._find_changed_args(default_args, sys_args)
         if sys_args.section:
             try:
-                section_name = sys_args.section        
-                section_config = config[section_name]                
+                section_name = sys_args.section
+                section_config = config[section_name]
             except KeyError:
                 raise KeyError(
                     "Section {} not found in config file".format(section_name)
@@ -108,8 +105,8 @@ class ExperimentParser(argparse.ArgumentParser):
             if key not in default_args:
                 # Raise the default argparse error alongside the usage
                 self.parser.error("unrecognized arguments: '{}''".format(key))
-    
-            # If the key has been passed in the command line, do not overwrite the 
+
+            # If the key has been passed in the command line, do not overwrite the
             # command line argument with the toml argument, but vice versa.
             if key in changed_args:
                 section_config[key] = changed_args[key]
@@ -122,7 +119,7 @@ class ExperimentParser(argparse.ArgumentParser):
         """ Write the config dictionary to a .toml file """
         with open(path, "w") as f:
             toml.dump(args, f)
-    
+
     def load_from_toml(self, path):
         """ Load the config dictionary from a .toml file """
         return self._load_toml(path)
