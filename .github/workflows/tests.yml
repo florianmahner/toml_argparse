@@ -30,6 +30,12 @@ jobs:
         python -m pip install flake8 pytest
         pip install -e .
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Generate Report
+      run: |
+        pip install coverage
+        coverage run -m unittest
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v2
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
