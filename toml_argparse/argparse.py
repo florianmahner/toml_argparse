@@ -4,12 +4,38 @@ import sys
 
 
 class ArgumentParser(argparse.ArgumentParser):
-    r"""Convenience argument parser for all experiments also accepts a .toml file as input
-    This class is a wrapper around the argparse.ArgumentParser class. It allows to parse arguments
-    from the command line and from a .toml file.
-    """
+    """Convenience warpper around `argparse.ArgumentParser` that accepts TOML files as input"""
 
     def __init__(self, *args, **kwargs):
+        """
+        This class adds two optional arguments to the `argparse.ArgumentParser`: `--config` and
+        `--section`. The `--config` argument specifies the path to a configuration file in the TOML format,
+        and the `--section` argument specifies the name of a section in the configuration file. If `--config`
+        is not provided, the default values specified add to the `argparse.ArgumentParser` object will be used. If
+        `--section` is not provided, all the arguments that do not have a section in the configuration file
+        will be used.
+
+        We have the following hierarchy of arguments:
+            1. Arguments passed through the command line are selected over TOML arguments, even in both are passed
+            2. Arguments from the TOML file are preferred over the default arguments
+            3. Arguments from the TOML with a section override the arguments without a section
+
+        Example of a TOML configuration file without a section:
+        argument_1 = "value_1"
+        argument_2 = "value_2"
+
+        Example of a TOML configuration file with a section:
+        [section_name]
+        argument_1 = "value_1"
+        argument_2 = "value_2"
+
+        Here `argument_1` in [section_name] will override `argument_1` without a section.
+
+        Args:
+            *args: Positional arguments to be passed to the `argparse.ArgumentParser` object.
+            **kwargs: Keyword arguments to be passed to the `argparse.ArgumentParser` object.
+        """
+
         super().__init__(*args, **kwargs)
         self.add_argument(
             "--config",
