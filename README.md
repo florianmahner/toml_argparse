@@ -12,9 +12,9 @@ This module is a convenience wrapper around argparse.ArgumentParser that accepts
 `toml_argparse` accepts --config and --section arguments to specify the path to a configuration file in TOML format and the name of a section in the configuration file, respectively.
 Uses the following hierarchy of arguments:
     
-    * Arguments passed through the command line are selected over TOML arguments, even in both are passed
-    * Arguments from the TOML file are preferred over the default arguments
-    * Arguments from the TOML with a section override the arguments without a section
+- Arguments passed through the command line are selected over TOML arguments, even in both are passed
+- Arguments from the TOML file are preferred over the default arguments
+- Arguments from the TOML with a section override the arguments without a section
 
 
 ## Example Usage
