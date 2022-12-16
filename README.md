@@ -1,6 +1,7 @@
 ![example workflow](https://github.com/florianmahner/toml_argparse/actions/workflows/tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/florianmahner/toml_argparse/branch/main/graph/badge.svg?token=75FIYZG8BD)](https://codecov.io/gh/florianmahner/torch_multipletests)
 ![code style](https://img.shields.io/badge/code%20style-black-black)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 # :honeybee: toml_argparse
