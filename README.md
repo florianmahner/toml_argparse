@@ -3,7 +3,7 @@
 ![code style](https://img.shields.io/badge/code%20style-black-black)
 
 
-:honeybee: toml_argparse
+# :honeybee: toml_argparse
 
 This module is a convenience wrapper around argparse.ArgumentParser that accepts TOML files as input.
 
