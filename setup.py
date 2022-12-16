@@ -9,6 +9,7 @@ setup(
     author="Florian P. Mahner",
     author_email="florian.mahner@gmail.com",
     license="LICENSE",
+    install_requires=["toml"],
     long_description=open("README.md").read(),
     packages=find_packages(),
     python_requires=">=3.7",
